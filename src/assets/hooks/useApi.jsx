@@ -6,15 +6,12 @@ export default useApi = (apiFunc) => {
   const [error, setError] = useState();
   const [progress, setProgress] = useState();
 
-  const request = (...args) => {
+  const request = async (...args) => {
     setLoading(true);
-    // const result = await apiFunc(...args);
-    const result = { ok: true, data: ["hi", "there"] };
+    const result = await apiFunc(...args);
     setLoading(false);
     setProgress(null);
-    console.log(result);
     if (!result.ok) {
-      console.log(result.originalError);
       return setError(true);
     }
     setError(false);

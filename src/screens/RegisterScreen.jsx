@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
+import { ErrorMessage } from "../components/form";
 
-import AppText from "../components/AppText";
+import usersApi from "../api/users";
+import routes from "../navigators/routes";
 import Screen from "./Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/form";
+import useAuth from "../hooks/useAuth";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -11,14 +14,35 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(4).label("Password"),
 });
 
-function RegisterScreen(props) {
+function RegisterScreen({ navigation }) {
+  const [error, setError] = useState(false);
+  const { logIn } = useAuth();
+
+  const handleRegister = async (credentials) => {
+    const response = await usersApi.register(credentials);
+    if (!response.ok) {
+      if (response.data) {
+        setError(response.data);
+      } else {
+        setError("An unknown error has occured");
+      }
+      return;
+    }
+    setError(null);
+  };
+
   return (
     <Screen>
       <AppForm
         initialValues={{ name: "", email: "", password: "" }}
-        onSubmit={(value) => console.log()}
+        onSubmit={handleRegister}
         validationSchema={validationSchema}
       >
+        <ErrorMessage
+          error="Email has already been taken"
+          visible={error ? true : false}
+        />
+
         <AppFormField
           name={"name"}
           placeholder="Name"

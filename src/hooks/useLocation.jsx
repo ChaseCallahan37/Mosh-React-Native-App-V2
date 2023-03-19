@@ -16,9 +16,21 @@ export default useLocation = () => {
     } catch (error) {}
   };
 
+  const getLocation = () => {
+    try {
+      return {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     getLocationPermission();
   }, []);
 
-  return location;
+  return getLocation;
 };

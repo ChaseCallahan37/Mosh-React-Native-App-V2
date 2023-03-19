@@ -36,19 +36,25 @@ function ListingsScreen({ navigation }) {
         </>
       )}
 
-      {loading && <LoadingIcon visible={loading} />}
-      <FlatList
-        data={listings}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Card
-            onPress={() => handleOnPress(item)}
-            title={item.title}
-            subTitle={`$${item.price}`}
-            imageUrl={item.images[0].url}
-          />
-        )}
-      />
+      {loading ? (
+        <LoadingIcon visible={loading} />
+      ) : (
+        <FlatList
+          refreshing={loading}
+          onRefresh={request}
+          data={listings}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <Card
+              onPress={() => handleOnPress(item)}
+              title={item.title}
+              subTitle={`$${item.price}`}
+              imageUrl={item.images[0].url}
+              thumbnailUri={item.images[0].thumbnailUrl}
+            />
+          )}
+        />
+      )}
     </Screen>
   );
 }

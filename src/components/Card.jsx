@@ -1,13 +1,19 @@
 import React from "react";
-import { View, StyleSheet, Image, TouchableHighlight } from "react-native";
+import { View, StyleSheet, TouchableHighlight } from "react-native";
+import { Image } from "react-native-expo-image-cache";
+
 import colors from "../styles/colors";
 import AppText from "./AppText";
 
-function Card({ title, subTitle, imageUrl, onPress }) {
+function Card({ title, subTitle, imageUrl, onPress, thumbnailUri }) {
   return (
     <TouchableHighlight onPress={onPress}>
       <View style={styles.card}>
-        <Image style={styles.image} source={{ uri: imageUrl }} />
+        <Image
+          style={styles.image}
+          preview={{ uri: thumbnailUri }}
+          uri={imageUrl}
+        />
         <View style={styles.container}>
           <AppText style={styles.title}>{title}</AppText>
           <AppText style={styles.subTitle}>{subTitle}</AppText>

@@ -92,7 +92,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function ListingEditScreen({ route }) {
-  const location = useLocation();
+  const getLocation = useLocation();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const { data, error, loading, request } = useApi(listingApi.postListing);
@@ -101,13 +101,11 @@ function ListingEditScreen({ route }) {
   const handleSubmit = async (listing, { resetForm }) => {
     setProgress(0);
     setUploadVisible(true);
+
     const result = await listingApi.addListing(
       {
         ...listing,
-        location: {
-          longitude: location.coords.longitude,
-          latitude: location.coords.latitude,
-        },
+        location: getLocation(),
       },
       (progress) => setProgress(progress)
     );
